@@ -605,6 +605,19 @@
         outline: 2px solid var(--brand);
         outline-offset: 3px;
       }
+
+      @media print {
+        body {
+          background: #fff;
+        }
+        .project-card,
+        .stack-block,
+        .t-item,
+        .philosophy-grid,
+        .dash-grid {
+          break-inside: avoid;
+        }
+      }
     </style>
   </head>
   <body>
@@ -1072,6 +1085,17 @@
       reveals.forEach((el) => io.observe(el));
 
       // hero terminal + first dashboard bars are above the fold-ish; ensure hero itself doesn't need reveal
+
+      // print / PDF export: scroll-triggered reveals never fire without
+      // scrolling, so force everything visible before the page is printed
+      window.addEventListener("beforeprint", () => {
+        document.querySelectorAll(".reveal").forEach((el) => {
+          el.classList.add("in");
+        });
+        document.querySelectorAll(".bar-fill").forEach((bar) => {
+          bar.style.width = bar.getAttribute("data-target") + "%";
+        });
+      });
     </script>
   </body>
 </html>
